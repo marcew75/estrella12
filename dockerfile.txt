@@ -1,0 +1,22 @@
+# Usa la imagen base de Python
+FROM python:3.9-slim
+
+# Instala las dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos del proyecto al contenedor
+COPY . /app
+
+# Instala las dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expone el puerto de Streamlit
+EXPOSE 8501
+
+# Comando para iniciar la aplicación
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
